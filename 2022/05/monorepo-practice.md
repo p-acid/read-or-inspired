@@ -117,3 +117,5 @@ yarn workspace client run start
 ![의존성 호출 테스트](../../asset/monorepo-practice/dependency-test.png)
 
 <br/>
+
+### workspace 의존 관계 확인
