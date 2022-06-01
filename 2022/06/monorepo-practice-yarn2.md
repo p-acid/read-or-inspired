@@ -72,3 +72,11 @@ yarn set version berry
 그러면 다음 초기 파일이 생성된다.
 
 ![초기 파일](../../asset/monorepo-practice-yarn2/initial-files.png)
+
+버전 확인을 해보면 다음과 같이 나온다.
+
+![버전 체크](../../asset/monorepo-practice-yarn2/check-yarn-version.png)
+
+의존성을 추가하면 `.yarn/cache` 경로에 추가된다.
+
+<br/>
