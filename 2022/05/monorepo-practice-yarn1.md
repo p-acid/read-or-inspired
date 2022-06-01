@@ -3,6 +3,8 @@ title: "모노레포 툴 학습 : Yarn 1.x"
 created_at: "2022-05-30"
 ---
 
+> [NAVER D2 : 모던 프론트엔드 프로젝트 구성 기법 - 모노레포 도구 편](https://d2.naver.com/helloworld/7553804#ch1)
+
 # 모노레포 툴 학습 : Yarn 1.x
 
 ## Yarn workspaces
@@ -41,7 +43,7 @@ created_at: "2022-05-30"
 
 ### workspace 추가
 
-![모노레포 추가](../../asset/monorepo-practice/add-workspace.png)
+![모노레포 추가](../../asset/monorepo-practice-yarn1/add-workspace.png)
 
 - `client`, `server`, `common` 세 개의 `workspace` 를 추가하고 `yarn` 명령을 실행하면 다음과 같이 루트 디렉토리에 `node_modules` 생성
 
@@ -70,7 +72,7 @@ yarn workspace client add common@1.0.0
 
 위 명령을 사용하면 다음과 같이 된다.
 
-![의존성 추가](../../asset/monorepo-practice/add-dependencies.png)
+![의존성 추가](../../asset/monorepo-practice-yarn1/add-dependencies.png)
 
 이렇게 되면 npm 레지스트리에 배포된 `common` 이란 이름의 패키지가 있다 해도, **의존성 버전을 충족하면 로컬에 존재하는 `common` workspace를 우선하여 설치**한다.
 
@@ -114,7 +116,7 @@ module.exports = {
 yarn workspace client run start
 ```
 
-![의존성 호출 테스트](../../asset/monorepo-practice/dependency-test.png)
+![의존성 호출 테스트](../../asset/monorepo-practice-yarn1/dependency-test.png)
 
 <br/>
 
@@ -132,7 +134,7 @@ yarn workspaces info
 > yarn workspaces list
 > ```
 
-![의존성 호출 테스트](../../asset/monorepo-practice/check-dependencies.png)
+![의존성 호출 테스트](../../asset/monorepo-practice-yarn1/check-dependencies.png)
 
 <br/>
 
@@ -163,8 +165,8 @@ yarn add <PACKAGE_NAME> -W
 루트 디렉토리에 리액트 추가
 
 <div style={{display: "flex", gap: "8px"}}>
-    <img src="../../asset/monorepo-practice/add-dependencies-in-root-1.png" alt="add-dependencies-in-root-1" />
-    <img src="../../asset/monorepo-practice/add-dependencies-in-root-2.png" alt="add-dependencies-in-root-2" />
+    <img src="../../asset/monorepo-practice-yarn1/add-dependencies-in-root-1.png" alt="add-dependencies-in-root-1" />
+    <img src="../../asset/monorepo-practice-yarn1/add-dependencies-in-root-2.png" alt="add-dependencies-in-root-2" />
 </div>
 
 <br/>
@@ -177,7 +179,7 @@ npm, yarn 등은 중복 의존성 설치 방지를 위해 [호이스팅 기법](
 >
 > [node_modules로부터 우리를 구원해 줄 Yarn Berry](https://toss.tech/article/node-modules-and-yarn-berry)
 
-![모노레포 호이스팅](../../asset/monorepo-practice/monorepo-hoisting.png)
+![모노레포 호이스팅](../../asset/monorepo-practice-yarn1/monorepo-hoisting.png)
 
 이게 프로젝트 루트 `node_modules` 에서 모든 모듈에 액세스할 수 있는 것처럼 보이지만 **로컬 프로젝트에서 각 패키지를 빌드하는 경우**가 많음
 
