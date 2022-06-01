@@ -119,3 +119,77 @@ yarn workspace client run start
 <br/>
 
 ### workspace 의존 관계 확인
+
+아래 명령어를 통해 확인 가능
+
+```sh
+yarn workspaces info
+```
+
+> Yarn 2.x 부터는 아래 명령어로 확인
+>
+> ```sh
+> yarn workspaces list
+> ```
+
+![의존성 호출 테스트](../../asset/monorepo-practice/check-dependencies.png)
+
+<br/>
+
+### 모든 workspace에 대해 명령 실행
+
+아래 명령어를 통해 모든 workspace들을 순회하며 명령어 스크립트를 실행한다.
+
+```sh
+yarn workspaces run <command>
+```
+
+> Yarn 2.x 부터는 아래 명령어로 확인
+>
+> ```sh
+> yarn workspaces foreach <command>
+> ```
+
+<br/>
+
+### 루트 프로젝트에 의존성 추가
+
+다음 명령을 통해 workspace가 아닌 **루트 프로젝트에 의존성**을 추가
+
+```sh
+yarn add <PACKAGE_NAME> -W
+```
+
+루트 디렉토리에 리액트 추가
+
+<div style={{display: "flex", gap: "8px"}}>
+    <img src="../../asset/monorepo-practice/add-dependencies-in-root-1.png" alt="add-dependencies-in-root-1" />
+    <img src="../../asset/monorepo-practice/add-dependencies-in-root-2.png" alt="add-dependencies-in-root-2" />
+</div>
+
+<br/>
+
+### 호이스팅(의존성 끌어올리기)
+
+npm, yarn 등은 중복 의존성 설치 방지를 위해 [호이스팅 기법](https://classic.yarnpkg.com/blog/2018/02/15/nohoist/)을 사용
+
+> **Yarn Hoisting 관련 글 : 유령 의존성 부분**
+>
+> [node_modules로부터 우리를 구원해 줄 Yarn Berry](https://toss.tech/article/node-modules-and-yarn-berry)
+
+![모노레포 호이스팅](../../asset/monorepo-practice/monorepo-hoisting.png)
+
+이게 프로젝트 루트 `node_modules` 에서 모든 모듈에 액세스할 수 있는 것처럼 보이지만 **로컬 프로젝트에서 각 패키지를 빌드하는 경우**가 많음
+
+이때 일부 모듈 로더는 [심볼릭 링크](https://github.com/facebook/metro/issues/1)를 지원하지 않기도 하기에, `“module not found”` 오류를 발생시키기도 함
+
+이때 [nohoist](https://classic.yarnpkg.com/blog/2018/02/15/nohoist/) 사용 가능
+
+```json
+{
+  "workspaces": {
+    "packages": ["packages/*"],
+    "nohoist": ["**/react-native"]
+  }
+}
+```
