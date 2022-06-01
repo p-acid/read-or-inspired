@@ -1,9 +1,9 @@
 ---
-title: 모노레포 실습
+title: "모노레포 툴 학습 : Yarn 1.x"
 created_at: "2022-05-30"
 ---
 
-# 모노레포 툴 학습
+# 모노레포 툴 학습 : Yarn 1.x
 
 ## Yarn workspaces
 
