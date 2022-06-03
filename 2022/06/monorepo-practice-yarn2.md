@@ -80,3 +80,21 @@ yarn set version berry
 의존성을 추가하면 `.yarn/cache` 경로에 추가된다.
 
 <br/>
+
+## .pnp.cjs
+
+`.pnp.cjs` 파일 내 들어있는 정보는 다음과 같다.
+
+- 모든 의존성 메타 정보
+  - zip 경로, 의존성
+- ZipFS에 대한 처리 코드
+
+따라서 Berry 기반의 프로젝트는 `node src/main.js` 와 같은 명령으로는 실행할 수 없고 `yarn node src/main.js` 와 같이 Yarn을 통해서 실행해야 한다.
+
+```json
+{
+  "scripts": {
+    "start": "node src/main.js"
+  }
+}
+```
