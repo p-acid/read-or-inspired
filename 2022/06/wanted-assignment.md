@@ -106,6 +106,37 @@ export default memo(InputField);
 
 <br/>
 
+피드 페이지 내에서도 `Comment` 를 `memo` 로 감사 최적화
+
+```js
+import React, { memo } from "react";
+import styled from "styled-components";
+
+import { Text } from "../../Card";
+
+const Comment = ({ userName, contents }) => {
+  return (
+    <CommentBox>
+      <Text $type="name">{userName}</Text>
+      <Text>{contents}</Text>
+    </CommentBox>
+  );
+};
+
+export default memo(Comment);
+
+const CommentBox = styled.div`
+  display: flex;
+  gap: 8px;
+`;
+```
+
+![댓글 최적화 전](../../asset/wanted-assignment/befor_memorize.gif)
+
+![댓글 최적화 후](../../asset/wanted-assignment/after_memorize.gif)
+
+<br/>
+
 # 인증 여부에 따른 리다이렉팅
 
 ![리다이렉팅](../../asset/wanted-assignment/authorization.gif)
@@ -129,3 +160,5 @@ export default Dashboard;
 ```
 
 `token` 이 존재할 경우, 페이지를 껐다가 다시 루트 경로로 접근할 때 `Dashboard` 페이지 렌더링
+
+<br/>
