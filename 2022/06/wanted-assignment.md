@@ -131,7 +131,11 @@ const CommentBox = styled.div`
 `;
 ```
 
+### 댓글 최적화 전
+
 ![댓글 최적화 전](../../asset/wanted-assignment/befor_memorize.gif)
+
+### 댓글 최적화 후
 
 ![댓글 최적화 후](../../asset/wanted-assignment/after_memorize.gif)
 
