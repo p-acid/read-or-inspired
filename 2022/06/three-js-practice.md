@@ -56,6 +56,8 @@ export default Gltf;
 
 > Canvas는 부모 노드에 맞게 반응하므로 부모 너비와 높이를 변경하여 크기를 제어할 수 있다(이 경우 #canvas-container).
 
+<br/>
+
 ## `<mesh>`
 
 장면 에서 실제로 무엇을 보기 위해 `<mesh />` 를 추가한다.
@@ -139,3 +141,64 @@ new THREE.BoxGeometry(2, 2, 2);
 <directionalLight color="blue" position={[5, 5, 5]} intensity={0.2} /> // 카메라 기준 정면 쪽 빛
 <ambientLight color="green" position={[5, 5, 5]} intensity={0.2} /> // 카메라 기준 외곽 쪽 빛
 ```
+
+<br/>
+
+# 220628 : `useSpring` 같이 사용하기
+
+> 참고 : [Using with React Spring](https://docs.pmnd.rs/react-three-fiber/tutorials/using-with-react-spring)
+
+![scale-control](../../asset/three-js-practice/useSpring_test.gif)
+
+## 패키지 설치
+
+```bash
+npm install @react-spring/three
+```
+
+or
+
+```bash
+yarn add @react-spring/three
+```
+
+<br/>
+
+## 활용
+
+- 호출부
+
+```js
+import { animated, useSpring } from "@react-spring/three";
+```
+
+- `props` 생성
+
+```js
+const props = useSpring({
+  scale: isGrow ? [1.5, 1.5, 1.5] : [0.5, 0.5, 0.5],
+  position,
+  config: config.stiff,
+});
+```
+
+- `animated.mesh` 생성 후 `props` 할당
+
+```js
+<animated.mesh {...props} ref={meshRef}>
+  <sphereBufferGeometry />
+  <meshPhongMaterial color="royalblue" />
+</animated.mesh>
+```
+
+- `state` 값 등을 통해 `props` 내 값에 변화를 주어 애니메이션 실행
+
+<br/>
+
+## `config`
+
+```js
+import { config } from "@react-spring/three";
+```
+
+- `useSpring` 을 사용할 때, 애니메이션의 강약 조절 및 애니메이션 스타일을 정의할 수 있다.
