@@ -1,6 +1,7 @@
 ---
 title: "Three.js 학습 일지"
 created_at: "2022-06-27"
+last_updated_at: "2022-06-28"
 ---
 
 > 이전 학습 내용 스킵

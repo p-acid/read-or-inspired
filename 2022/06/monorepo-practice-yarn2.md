@@ -1,6 +1,7 @@
 ---
 title: "모노레포 툴 학습 : Yarn Berry (2.x, 3.x)"
 created_at: "2022-06-01"
+last_updated_at: "2022-06-03"
 ---
 
 > [NAVER D2 : 모던 프론트엔드 프로젝트 구성 기법 - 모노레포 도구 편](https://d2.naver.com/helloworld/7553804#ch1)
