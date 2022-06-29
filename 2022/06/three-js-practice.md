@@ -203,3 +203,128 @@ import { config } from "@react-spring/three";
 ```
 
 - `useSpring` 을 사용할 때, 애니메이션의 강약 조절 및 애니메이션 스타일을 정의할 수 있다.
+
+<br/>
+
+# 220628 : 그림자 및 불규칙 요소 렌더링
+
+## 그림자 렌더링
+
+![shadow_test](../../asset/three-js-practice/shadow_test.gif)
+
+```tsx
+import { Box, Plane } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
+import { useRef } from "react";
+import { Mesh } from "three";
+
+const ShadowBox = () => {
+  const boxRef = useRef<Mesh>(null);
+
+  useFrame(() => {
+    boxRef.current!.rotation.y += 0.004;
+    boxRef.current!.rotation.x += 0.004;
+    boxRef.current!.rotation.z += 0.004;
+  });
+
+  return (
+    <group>
+      <Box castShadow receiveShadow ref={boxRef} position={[0, 0.5, 0]}>
+        <meshStandardMaterial attach="material" color="white" />
+      </Box>
+      <Plane
+        receiveShadow
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -1, 0]}
+        args={[1000, 1000]}
+      >
+        <meshStandardMaterial attach="material" color="white" />
+      </Plane>
+    </group>
+  );
+};
+
+export default ShadowBox;
+```
+
+```tsx
+<Canvas
+  camera={{ position: [-3, 2, 10], fov: 90 }}
+  style={{ height: "50rem" }}
+  shadows
+>
+  <fog attach="fog" args={["#cecece", 0, 100]} />
+  <ambientLight intensity={0.1} />
+  <directionalLight
+    intensity={0.5}
+    castShadow
+    shadow-mapSize-height={512}
+    shadow-mapSize-width={512}
+  />
+  <pointLight
+    castShadow
+    intensity={20}
+    args={["green", 1, 100]}
+    position={[1, 1, 1]}
+  />
+  <spotLight
+    castShadow
+    intensity={20}
+    args={["blue", 1, 100]}
+    position={[-1, 1, 1]}
+  />
+  <gridHelper position={[0, -0.5, 0]} />
+  <ShadowBox />
+</Canvas>
+```
+
+## [`@react-three/drei`](https://www.npmjs.com/package/@react-three/drei)
+
+- `react-three-fiber` 에서 활용할 기성 추상화 컬렉션
+- 일반적인 구성 요소를 단순 컴포넌트로 구현 가능
+
+### Props 정리
+
+- `castShadow` : `lightObject` 를 통해 `shadow` 를 만드는 대상에 지정
+- `receiveShadow` : `shadow` 가 표현될 대상
+
+## [`<meshStandardMaterial>`](https://sbcode.net/threejs/meshstandardmaterial/)
+
+- [물리 기반](https://en.wikipedia.org/wiki/Physically_based_rendering) 렌더링 방식
+
+## 캔버스 Props
+
+### [`<Canvas>`](https://docs.pmnd.rs/react-three-fiber/api/canvas)
+
+- `shadow` : 기본값 `false`, 그림자 반영 여부
+
+## scene 객체
+
+### [`<fog>`](https://threejs.org/docs/#api/en/scenes/Fog)
+
+- 선형 안개 표현
+- `args` : `{[color, near, far]}`
+  - `near` : 카메라 기준 가까이 얼마나
+  - `far` : 카메라 기준 멀리 얼마나
+
+## light 객체
+
+- `intensity` : 빛의 강도
+
+### [`<ambientLight>`](https://threejs.org/docs/?q=ambientLight#api/en/lights/AmbientLight)
+
+- scene 내 모든 대상에 전체적으로 균일하게 비추는 빛
+
+### [`<pointLight>`](https://threejs.org/docs/?q=ambientLight#api/en/lights/PointLight)
+
+- 단일 지점에서 모든 방향으로 비추는 빛
+
+### [`<spotLight>`](https://threejs.org/docs/?q=ambientLight#api/en/lights/SpotLight)
+
+- 단일 지점에서 한 방향으로 멀어질수록 크기가 커지는 원뿔 형태의 빛
+
+<br/>
+
+## 불규칙 요소 렌더링
+
+![particles_test](../../asset/three-js-practice/particles_test.gif)
