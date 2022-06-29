@@ -1,7 +1,7 @@
 ---
 title: "Three.js 학습 일지"
 created_at: "2022-06-27"
-last_updated_at: "2022-06-28"
+last_updated_at: "2022-06-29"
 ---
 
 > 이전 학습 내용 스킵
@@ -206,7 +206,7 @@ import { config } from "@react-spring/three";
 
 <br/>
 
-# 220628 : 그림자 및 불규칙 요소 렌더링
+# 220629 : 그림자 및 불규칙 요소 렌더링
 
 ## 그림자 렌더링
 
