@@ -206,9 +206,7 @@ import { config } from "@react-spring/three";
 
 <br/>
 
-# 220629 : 그림자 및 불규칙 요소 렌더링
-
-## 그림자 렌더링
+# 220629 : 그림자 렌더링
 
 ![shadow_test](../../asset/three-js-practice/shadow_test.gif)
 
@@ -325,7 +323,7 @@ export default ShadowBox;
 
 <br/>
 
-## 불규칙 요소 렌더링
+# 220630 : 불규칙 요소 렌더링
 
 ![particles_test](../../asset/three-js-practice/particles_test.gif)
 
