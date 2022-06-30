@@ -328,3 +328,127 @@ export default ShadowBox;
 ## 불규칙 요소 렌더링
 
 ![particles_test](../../asset/three-js-practice/particles_test.gif)
+
+```tsx
+import * as THREE from "three";
+import React, { useRef, useMemo } from "react";
+import { useFrame, useThree } from "@react-three/fiber";
+import { InstancedMesh, PointLight } from "three";
+
+export default function Particles({ count, mouse }) {
+  const mesh = useRef<InstancedMesh>(null); // instancedMesh 오브젝트 ref
+  const light = useRef<PointLight>(null); // light 객체 ref
+  const { size, viewport } = useThree();
+  /*
+  size: view 범위(100% 확장 및 자동 조정)
+  viewport: 3D 단위 및 요소(size/viewport)의 viewport 범위
+  */
+  const aspect = size.width / viewport.width; // 관점?
+
+  const dummy = useMemo(() => new THREE.Object3D(), []);
+
+  // particle 배열 count 만큼 생성
+  const particles = useMemo(() => {
+    const temp: any[] = [];
+    for (let i = 0; i < count; i++) {
+      const t = Math.random() * 100;
+      const factor = 20 + Math.random() * 100;
+      const speed = 0.01 + Math.random() / 200;
+      const xFactor = -50 + Math.random() * 100;
+      const yFactor = -50 + Math.random() * 100;
+      const zFactor = -50 + Math.random() * 100;
+      temp.push({ t, factor, speed, xFactor, yFactor, zFactor, mx: 0, my: 0 });
+    }
+    return temp;
+  }, [count]);
+
+  useFrame(() => {
+    light.current!.position.set(
+      mouse.current[0] / aspect,
+      -mouse.current[1] / aspect,
+      0
+    );
+
+    // Matrics4 행렬을 정의된 인스턴스(instancedMesh)에 설정
+    particles.forEach((particle, i) => {
+      let { t, factor, speed, xFactor, yFactor, zFactor } = particle;
+
+      t = particle.t += speed / 2;
+      const a = Math.cos(t) + Math.sin(t * 1) / 10;
+      const b = Math.sin(t) + Math.cos(t * 2) / 10;
+      const s = Math.cos(t);
+      particle.mx += (mouse.current[0] - particle.mx) * 0.01;
+      particle.my += (mouse.current[1] * -1 - particle.my) * 0.01;
+
+      dummy.position.set(
+        // Object의 로컬 위치. default는 Vector3(0, 0, 0)
+        (particle.mx / 10) * a +
+          xFactor +
+          Math.cos((t / 10) * factor) +
+          (Math.sin(t * 1) * factor) / 10,
+        (particle.my / 10) * b +
+          yFactor +
+          Math.sin((t / 10) * factor) +
+          (Math.cos(t * 2) * factor) / 10,
+        (particle.my / 10) * b +
+          zFactor +
+          Math.cos((t / 10) * factor) +
+          (Math.sin(t * 3) * factor) / 10
+      );
+      dummy.scale.set(s, s, s); // scale : Object의 로컬 규모. default는 Vector3(1, 1, 1)
+      dummy.rotation.set(s * 5, s * 5, s * 5); // rotation : radian 단위의 Object 로컬 회전
+      dummy.updateMatrix();
+
+      mesh.current!.setMatrixAt(i, dummy.matrix); // setMatrixAt 이하 설명
+    });
+    mesh.current!.instanceMatrix.needsUpdate = true; // setMatrixAt 설명 참조
+  });
+  return (
+    <>
+      <pointLight ref={light} distance={40} intensity={8} color="lightblue" />
+      <instancedMesh ref={mesh} args={[undefined, undefined, count]}>
+        <dodecahedronGeometry args={[0.2, 0]} />
+        <meshPhongMaterial color="#366d4a" />
+      </instancedMesh>
+    </>
+  );
+}
+```
+
+```tsx
+<Canvas style={{ height: "50rem" }}>
+  <Particles count={10000} mouse={mouse} />
+  <color attach="background" args={["#b6dbd9"]} />
+</Canvas>
+```
+
+## [`useThree`](https://gracious-keller-98ef35.netlify.app/docs/api/hooks/useThree/)
+
+- 기본 렌더러, `scene`, `camera` 와 같이 내부적으로 유지되는 모든 기본 객체에 액세스할 수 있는 훅.
+- `Canvas` 컴포넌트 안에서 사용해야 함
+
+## [`Mesh.setMatricsAt(index, matrics)`](https://threejs.org/docs/#api/en/objects/InstancedMesh.setMatrixAt)
+
+- 지정된 `local transformation matrix` 를 정의된 인스턴스로 설정합니다.
+- 다 설정한 뒤에 `intanceMatrics.needsUpdate()` 를 설정했는지 확인해야 합니다.
+
+## [`Object3D.updateMatrics()`](https://threejs.org/docs/#api/en/core/Object3D.updateMatrix)
+
+- Updates the local transform : 로컬 변화를 업데이트 한다.
+
+## [`instancedMesh`](https://threejs.org/docs/?q=instancedMesh#api/en/objects/InstancedMesh)
+
+- 인스턴스 렌더링을 지원하는 `Mesh`
+- 동일한 Geometry와 material을 사용하지만 다수의 변환이 많은 오브젝트를 렌더링해야 하는 경우 사용
+- draw call을 줄여 렌더링 성능 향상에 도움이 됨
+
+## [`dodecahedronGeometry`](https://threejs.org/docs/?q=dodecahedronGeometry#api/en/geometries/DodecahedronGeometry)
+
+- 12면체 : `(radius: float, detail: interger)`
+  - `radius` : 12면체 반지름. default 1
+  - `detail` : default 0. 0보다 큰 값으로 설정하면 꼭지점이 추가되어 더이상 12면체가 아님
+
+## [`meshPhongMaterial`](https://threejs.org/docs/?q=meshPhongMaterial#api/en/materials/MeshPhongMaterial)
+
+- 물리적 기반이 아닌 [Blinn-Phong](https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_reflection_model) 모델 사용
+- 광택 처리 표현 가능
