@@ -1,7 +1,7 @@
 ---
 title: "Three.js 학습 일지"
 created_at: "2022-06-27"
-last_updated_at: "2022-06-30"
+last_updated_at: "2022-07-03"
 ---
 
 > 이전 학습 내용 스킵
@@ -450,3 +450,55 @@ export default function Particles({ count, mouse }) {
 
 - 물리적 기반이 아닌 [Blinn-Phong](https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_reflection_model) 모델 사용
 - 광택 처리 표현 가능
+
+<br/>
+
+# 220703 : 3D 텍스트 렌더링
+
+![three_dimension_word](../../asset/three-js-practice/three_dimension_word.gif)
+
+```tsx
+import React, { useRef } from "react";
+import { Group } from "three";
+import { useFrame } from "@react-three/fiber";
+import { Text3D } from "@react-three/drei";
+
+const SignInVisual = () => {
+  const groupRef = useRef<Group>(null);
+
+  useFrame(() => {
+    groupRef.current!.rotation.x += 0.01;
+    groupRef.current!.rotation.y += 0.01;
+    groupRef.current!.rotation.z += 0.01;
+  });
+
+  return (
+    <group ref={groupRef}>
+      <Text3D
+        scale={[2, 2, 2]}
+        position={[-3, 1, 0]}
+        font="/assets/fonts/Monster_Bites_Regular.json"
+      >
+        {"Let's"}
+        <meshMatcapMaterial />
+      </Text3D>
+      <Text3D
+        scale={[2, 2, 2]}
+        position={[-4.5, -1, 0]}
+        font="/assets/fonts/Monster_Bites_Regular.json"
+      >
+        FRIDAY
+        <meshMatcapMaterial />
+      </Text3D>
+    </group>
+  );
+};
+
+export default SignInVisual;
+```
+
+## [`Text3D`](https://www.npmjs.com/package/@react-three/drei#text3d)
+
+- `three.js` 의 `TextGeometry` 를 사용하여 3D 텍스트 형태 생성
+- `Text3D` 에는 [facetype.js](http://gero3.github.io/facetype.js/) JSON 형식의 글꼴이 필요합니다.
+  - 폰트 데이터를 불러오는 동안 일시 중지되며 글꼴을 직접 로드할 수도 있다.
