@@ -67,3 +67,32 @@ const EnhancedComponent = higherOrderComponent(WrappedComponent);
 ```
 
 - 유사한 개념으로는 Redux의 [connect](https://github.com/reduxjs/react-redux/blob/master/docs/api/connect.md#connect)와 Relay의 [createFragmentContainer](https://relay.dev/docs/v10.1.3/fragment-container/#createfragmentcontainer)
+
+## [The provider pattern](https://www.patterns.dev/posts/provider-pattern/)
+
+- 컴포넌트 트리의 **여러 컴포넌트에서 전역 데이터를 공유하는데 사용되는 고급 패턴**
+- 리액트에서는 [Context API](https://ko.reactjs.org/docs/context.html)[^2)]를 통해 구현할 수 있다.
+- **prop drilling**[^3)] 문제를 해결하기 위해 사용한다.
+  - 즉, prop drilling 없이 컴포넌트 트리 내에서 데이터 공유가 가능하다.
+- 현재 Context 값을 구독하기 위한 `useContext` Hook도 존재
+
+[^2)]: 간단하게 말하자면, 리액트 컴포넌트 트리 안에서 전역적(global)이라고 볼 수 있는 데이터를 공유할 수 있도록 고안된 방법이다.
+[^3)]: 하향식 데이터 흐름에서 최종 prop 전달 컴포넌트까지 각 단계별로 prop을 명시적으로 전달하는 프로세스
+
+## [The compound components pattern](https://kentcdodds.com/blog/compound-components-with-react-hooks)
+
+- **여러 컴포넌트가 상태를 공유하고 로직을 처리할 수 있는 간단하고 효율적인 방법**을 제공하는 고급 리액트 컨테이너 패턴
+- `context API` 혹은 `React.cloneElement` 를 통해 구현 가능
+- [점 표기법을 사용](https://ko.reactjs.org/docs/jsx-in-depth.html#using-dot-notation-for-jsx-type)하여 하나의 컴포넌트에서 새로운 컴포넌트를 만들어 포함시킬 수 있음
+
+## [The presentational and container component patterns](https://www.patterns.dev/posts/presentational-container-pattern/)
+
+- 관심사 분리를 위한 패턴. 복잡한 상태 저장 로직을 분리하는데 도움이 됨.
+- 그러나 Hooks를 사용하면 간단히 이를 가능케 하므로 Hooks 사용을 권장
+
+## [The Hooks pattern](https://ko.reactjs.org/docs/hooks-rules.html#gatsby-focus-wrapper)
+
+- 함수형 컴포넌트에서 생명주기 관련 로직을 활용하기 위한 기능
+- 클래스형 컴포넌트[^4)]를 보다 더 깔끔하게 리팩토링 가능
+
+[^4)]: [클래스형 컴포넌트가 갖는 문제](https://ko.reactjs.org/docs/hooks-intro.html#classes-confuse-both-people-and-machines)를 해결할 수 있다.
