@@ -1,0 +1,26 @@
+## 2023-02-01
+
+### [Type challenges](https://github.com/type-challenges/type-challenges)
+
+- ReplaceKeys (Failed)
+
+```typescript
+type ReplaceKeys<U, T, Y> = { 
+  [Key in keyof U]: 
+    Key extends T 
+      ? Key extends keyof Y 
+        ? Y[Key] 
+        : never 
+      : U[Key] 
+  }
+```
+
+- Remove Index Signature (Failed)
+  - 역으로 시그니처 키 타입에 해당하는 타입들을 `extends` 로 비교하여 시그니쳐 인덱스 구별
+
+```typescript
+type SignatureKey = string | number | symbol
+
+type RemoveIndexSignature<T> = { [Key in keyof T as SignatureKey extends keyof T[Key] ? never : Key]: T[Key]; }
+```
+
